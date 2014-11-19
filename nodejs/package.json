@@ -1,0 +1,18 @@
+{
+  "name": "realtime-chat",
+  "version": "0.0.1",
+  "description": "Realtime chat w/ Laravel",
+  "main": "server.js",
+  "dependencies": {
+    "redis": "~0.12.1",
+    "express": "~4.10.2",
+    "socket.io": "~1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Guilherme Solinscki",
+  "license": "ISC"
+}

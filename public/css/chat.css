@@ -1,0 +1,20 @@
+.user-picture {
+	margin-right: 10px;
+}
+
+.messages-panel {
+	height: 400px;
+	overflow-y: scroll;
+}
+
+.send-message {
+    margin-top: 5px;
+}
+
+.new-message {
+    margin-bottom: 5px;
+}
+
+.message {
+    margin: 10px;
+}

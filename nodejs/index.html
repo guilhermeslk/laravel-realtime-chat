@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Realtime Chat Server</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="Guilherme Solinscki">
+
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<style>
+			body {
+			    font-family: "Courier New", Courier, monospace;
+			    margin: 20px;
+			    background-color: silver;
+			    color: white;
+			}
+			h3 {
+				color: black;
+			}
+			#output {
+				overflow-y: scroll;
+				height: 500px;
+				margin-top: 10px;
+				background-color: black;
+				padding: 20px; 
+			}
+			.green {
+				color: lime;
+			}
+			.yellow {
+				color: orange;
+			}
+			.red {
+				color: red;
+			}
+			.blue {
+				color: aqua;
+			}
+		</style>
+		<script type="text/javascript">
+  			var socket = io('http://localhost:3000');
+  			 	
+  			socket.emit('join', { conversation:  'admin' });
+
+  			// Events
+  			socket.on('welcome', function (data) {
+  				appendMessage(data.message, 'green');
+  			});
+
+  			socket.on('disconnect', function (data) {
+  				appendMessage('Disconnected: ' + data, 'red');
+  			});
+
+  			socket.on('connect_error', function (data) {
+  				appendMessage('Connect Error: ' + data, 'red');
+  			});
+
+  			socket.on('reconnecting', function (data) {
+  				appendMessage('Reconnecting: ' + data, 'yellow');
+  			});
+
+  			socket.on('connect_timeout', function (data) {
+  				appendMessage('Connection Timeout: ' + data, 'yellow');
+  			});
+
+  			// Chat Events
+   			socket.on('messages.update', function(data) {
+   				appendMessage( 'Redis Message: ' + data , 'blue');
+   			});
+
+  			// Funções
+  			function appendMessage(msg, color) {
+  				var 
+  					date = new Date(),
+  					html = '',
+  					objDiv = document.getElementById('output');
+
+  				html += '&#62;&nbsp;';
+  				html += '[' + date +  ']';
+    			html += '&nbsp;<span class="' + color + '" >' + msg + '</span><br/>';
+    			html += '<br/>';
+
+    			objDiv.innerHTML += html;
+    			objDiv.scrollTop = objDiv.scrollHeight;
+  			}
+		</script>
+	</head>
+	<body>
+		<!-- Página de testes do servidor realtime !-->
+		<h3>Realtime Chat Server Monitor</h3>
+		<hr/>
+		<div id="output">
+		</div>
+	</body>
+</html>
