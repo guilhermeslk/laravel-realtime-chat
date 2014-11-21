@@ -5,18 +5,27 @@ class ChatController extends \BaseController {
 	public function getIndex() {
 
 		if(Input::has('conversation')) {
-			$current_conversation = Conversation::where('name',  Input::get('conversation'))->first();
+			$current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
 		} else {
 			$current_conversation = Auth::user()->conversations()->first();
 		}
 
-		Session::set('current_conversation', $current_conversation->name);
-		
+		if($current_conversation) {
+			Session::set('current_conversation', $current_conversation->name);
+		}
+
 		$conversations = Auth::user()->conversations()->get();
+		$users = User::where('id', '<>', Auth::user()->id)->get();
+		$recipients = array();
+
+		foreach($users as $key => $user) {
+			$recipients[ $user->id] = $user->username;
+		}
 
 		return View::make('templates/chat')->with(array(
 			'conversations' 	   => $conversations, 
-			'current_conversation' => $current_conversation
+			'current_conversation' => $current_conversation,
+			'recipients' => $recipients 
 		));
 	}
 }

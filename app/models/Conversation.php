@@ -2,26 +2,29 @@
 
 class Conversation extends Eloquent {
 
-	protected $table = 'conversations';
+    protected $table    = 'conversations';
+    protected $fillable = array('author_id', 'name', 'created_at');
 
-	public function users() {
-		return $this->belongsToMany('User', 'conversations_users', 'conversation_id', 'user_id')->where('user_id', '<>', Auth::user()->id);
-	}
+    public $timestamps = false;
 
-	public function messages() {
-		return $this->hasMany('Message', 'conversation_id', 'id');
-	}
+    public function users() {
+        return $this->belongsToMany('User', 'conversations_users', 'conversation_id', 'user_id')->where('user_id', '<>', Auth::user()->id);
+    }
 
-	public function getUnreadMessagesCounterAttribute() {
-		
-		$messages_ids = DB::table('messages')->where('conversation_id', $this->attributes['id'])
-		->lists('id');
+    public function messages() {
+        return $this->hasMany('Message', 'conversation_id', 'id');
+    }
 
-		$counter = DB::table('messages_notifications')
-		->whereIn('message_id', $messages_ids)
-		->where('read', false)
-		->where('user_id', Auth::user()->id)->count();
-		
-		return $counter;
-	}
+    public function getUnreadMessagesCounterAttribute() {
+        
+        $messages_ids = DB::table('messages')->where('conversation_id', $this->attributes['id'])
+        ->lists('id');
+
+        $counter = DB::table('messages_notifications')
+        ->whereIn('message_id', $messages_ids)
+        ->where('read', false)
+        ->where('user_id', Auth::user()->id)->count();
+        
+        return $counter;
+    }
 }

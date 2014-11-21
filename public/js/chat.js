@@ -16,7 +16,7 @@ $(function() {
 		});
 
 	jqxhr.done(function(data) {
-		if(data.success) {
+		if(data.success && data.result.length > 0) {
 			$.each(data.result, function(index, conversation) {
 				socket.emit('join', { conversation:  conversation.name });
 			});
@@ -87,15 +87,20 @@ $(function() {
 			$badge.text(counter + 1);
 		} else {
 			$conversation.prepend('<span class="badge">1</span>');
-		}
-		
+		}	
 	}
 
 	function scrollToBottom() {
 		var $messageList  = $("#messageList");
 
-		$messageList.animate({scrollTop: $messageList[0].scrollHeight}, 500);
+		if($messageList.length) {
+			$messageList.animate({scrollTop: $messageList[0].scrollHeight}, 500);
+		}
 	}
 
-	$("#btnSendMessage").on('click', sendMessage);
+	$('#btnSendMessage').on('click', sendMessage);
+
+	$('#btnNewMessage').on('click', function() {
+		$('#newMessageModal').modal('show');
+	});
 });

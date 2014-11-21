@@ -37,6 +37,14 @@ class UsersTableSeeder extends Seeder {
 				'image_path' => '/img/hank.jpg',
 				'created_at' => new DateTime,
 				'updated_at'  => new DateTime
+			),
+			array(
+				'email' 	  => 'gusfring@gmail.com',
+				'username'	  => 'gusfring',
+				'password' 	  => Hash::make('gusfring'),
+				'image_path' => '/img/gusfring.jpg',
+				'created_at' => new DateTime,
+				'updated_at'  => new DateTime
 			)
 		);
 

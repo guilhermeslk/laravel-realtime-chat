@@ -53,3 +53,9 @@ Route::get('users/{user_id}/conversations', array(
 	'as'	 => 'conversations_users.index',
 	'uses'	 => 'ConversationUserController@getIndex'
 ));
+
+Route::post('/conversations/', array(
+	'before' => 'auth',
+	'as' 	 => 'conversations.postStore',
+	'uses'   => 'ConversationController@postStore'
+));

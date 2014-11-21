@@ -34,7 +34,7 @@
 	<div class="container">
 		<div class="row">
 	        <div class="col-lg-3 new-message text-right">
-	            <a href="" class="btn btn-sm btn-default" role="button"><i class="fa fa-plus"></i> New Message</a>
+	            <a id="btnNewMessage" class="btn btn-sm btn-default" role="button"><i class="fa fa-plus"></i> New Message</a>
 	        </div>	        
 	    </div>
 	    <div class="row">
@@ -59,19 +59,21 @@
 		        @endforeach
 	        </div>
 	        <div class="col-lg-8">
-		        <div class="panel panel-default">
-		        	<div id="messageList" class="panel-body messages-panel">
-						@include('templates/messages', array('messages' => $current_conversation->messages))
-					</div>
-		        </div>
-		        {{ Form::open(array('action' => 'MessageController@postStore')) }}
-		            <div class="send-wrap">
-		                <textarea id="messageBox" class="form-control send-message" rows="3" placeholder="Write a reply..."></textarea>
-		            </div>
-		            <div class="send-message">
-		                <a id="btnSendMessage" class="text-right btn btn-sm btn-danger pull-right" role="button"><i class="fa fa-send"></i> Send Message</a>
-		            </div>
-            	{{ Form::close() }}
+	    		@if($current_conversation)
+			        <div class="panel panel-default">
+			        	<div id="messageList" class="panel-body messages-panel">
+							@include('templates/messages', array('messages' => $current_conversation->messages))
+						</div>
+			        </div>
+			        {{ Form::open(array('action' => 'MessageController@postStore')) }}
+			             
+			           	<textarea id="messageBox" class="form-control send-message" rows="3" placeholder="Write a reply..."></textarea>
+			            
+			            <div class="send-message">
+			                <a id="btnSendMessage" class="text-right btn btn-sm btn-danger pull-right" role="button"><i class="fa fa-send"></i> Send Message</a>
+			            </div>
+	            	{{ Form::close() }}
+	            @endif
             </div>
 	    </div>
     </div>
@@ -85,3 +87,5 @@
 	</script>
 	<script src="{{ asset('/js/chat.js')}}"></script>
 @stop
+
+@include('templates/new_message_modal', array('recipients' => $recipients))

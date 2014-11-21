@@ -32,17 +32,16 @@ class MessageController extends \BaseController {
 
    		$message = Message::create($params);
 
-   		foreach($conversation->users as $user) {
+   		// Create Message Notifications
+   		$messages_notifications = array();
 
-   			$params = array(
-   				'user_id' => $user->id,
-   				'message_id' => $message->id,
-   				'read'    => false
-   			);
+   		foreach($conversation->users() as $user_id) {
+			array_push($messages_notifications, new MessageNotification(array('user_id' => $user_id, 'read' => false))); 
+		}
 
-   			MessageNotification::create($params);
-   		}
+		$message->messages_notifications()->saveMany($messages_notifications);
 
+		// Publish Data To Redis
    		$data = array(
 			'conversation' => Input::get('conversation'), 
 			'user_id' 	   => Input::get('user_id'),

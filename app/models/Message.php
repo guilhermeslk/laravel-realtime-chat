@@ -16,4 +16,8 @@ class Message extends Eloquent {
     {
         return $this->belongsTo('Conversation', 'conversation_id');
     }
+
+    public function messages_notifications() {
+        return $this->hasMany('MessageNotification', 'message_id', 'id');
+    }
 }
