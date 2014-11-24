@@ -2,6 +2,11 @@
 
 class ConversationController extends \BaseController {
 
+	/**
+	 * Display a listing of the conversations.
+	 *
+	 * @return Response
+	 */
 	public function index() {
 		$current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
 		$conversations 		  = Auth::user()->conversations()->get();
@@ -19,6 +24,11 @@ class ConversationController extends \BaseController {
 		));
 	}
 
+	/**
+	 * Store a newly created conversation in storage.
+	 *
+	 * @return Response
+	 */
 	public function store() {
 
 		$rules = array( 

@@ -2,6 +2,11 @@
 
 class ConversationUserController extends \BaseController {
 
+	/**
+	 * Display a listing of the user conversations.
+	 *
+	 * @return Response
+	 */
 	public function index($user_id) {
 		$conversations_users = ConversationUser::where('user_id', $user_id)->lists('conversation_id');
 

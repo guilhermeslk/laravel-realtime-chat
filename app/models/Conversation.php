@@ -15,16 +15,7 @@ class Conversation extends Eloquent {
         return $this->hasMany('Message', 'conversation_id', 'id');
     }
 
-    public function getUnreadMessagesCounterAttribute() {
-        
-        $messages_ids = DB::table('messages')->where('conversation_id', $this->attributes['id'])
-        ->lists('id');
-
-        $counter = DB::table('messages_notifications')
-        ->whereIn('message_id', $messages_ids)
-        ->where('read', false)
-        ->where('user_id', Auth::user()->id)->count();
-        
-        return $counter;
+    public function messagesNotifications() {
+        return $this->hasMany('MessageNotification', 'conversation_id', 'id')->where('read', 0)->where('user_id', Auth::user()->id);
     }
 }

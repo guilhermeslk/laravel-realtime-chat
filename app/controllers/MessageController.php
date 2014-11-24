@@ -2,6 +2,11 @@
 
 class MessageController extends \BaseController {
 
+	/**
+	 * Display a listing of the messages.
+	 *
+	 * @return Response
+	 */
 	public function index() {
 
 		$conversation = Conversation::where('name', Input::get('conversation'))->first();
@@ -10,6 +15,11 @@ class MessageController extends \BaseController {
 		return View::make('templates/messages')->with('messages', $messages)->render();
 	}
 
+	/**
+	 * Store a newly created message in storage.
+	 *
+	 * @return Response
+	 */
 	public function store() {
 		$rules 	   = array('body' => 'required');
 		$validator = Validator::make(Input::all(), $rules);
@@ -35,9 +45,9 @@ class MessageController extends \BaseController {
    		// Create Message Notifications
    		$messages_notifications = array();
 
-   		foreach($conversation->users() as $user_id) {
-			array_push($messages_notifications, new MessageNotification(array('user_id' => $user_id, 'read' => false))); 
-		}
+   		foreach($conversation->users()->get() as $user) {
+			array_push($messages_notifications, new MessageNotification(array('user_id' => $user->id, 'conversation_id' => $conversation->id, 'read' => false))); 
+		}		
 
 		$message->messages_notifications()->saveMany($messages_notifications);
 

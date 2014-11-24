@@ -5,8 +5,8 @@
         		<img class="media-object img-circle" width="30" height="30" src="{{ $conversation->users->first()->image_path }}">
         	</div>
 
-        	@if($conversation->unread_messages_counter) 
-           		<span class="badge">{{$conversation->unread_messages_counter}}</span>
+        	@if($conversation->messages_notifications->count()) 
+           		<span class="badge">{{ $conversation->messages_notifications->count() }}</span>
            	@endif
 
 			<h4 class="list-group-item-heading">

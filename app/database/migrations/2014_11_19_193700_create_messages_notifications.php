@@ -18,6 +18,8 @@ class CreateMessagesNotifications extends Migration {
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->integer('message_id')->unsigned();
 			$table->foreign('message_id')->references('id')->on('messages');
+			$table->integer('conversation_id')->unsigned();
+			$table->foreign('conversation_id')->references('id')->on('conversations');
 			$table->boolean('read');
 			$table->timestamps();
 		});

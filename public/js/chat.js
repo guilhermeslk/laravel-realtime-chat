@@ -62,7 +62,6 @@ $(function() {
    	});
 
    	socket.on('chat.conversations', function(data) {
-
    		var $conversationList = $("#conversationList");
    		
    		getConversations(current_conversation).done(function(data) {
@@ -132,12 +131,12 @@ $(function() {
 	***/
 
 	$('#btnSendMessage').on('click', function (evt) {
-		var 
-			$messageBox  = $("#messageBox");
+		var $messageBox  = $("#messageBox");
 
 		evt.preventDefault();
 
 		sendMessage($messageBox.val(), current_conversation, user_id).done(function(data) {
+			console.log(data);
 			$messageBox.val('');
 			$messageBox.focus();
 		});
