@@ -23,7 +23,8 @@ function handler (req, res) {
 /***
     Redis Channels Subscribes
 ***/
-redisClient.subscribe('messages.update');
+redisClient.subscribe('chat.conversations');
+redisClient.subscribe('chat.messages');
 
 /***
     Redis Events
@@ -31,8 +32,12 @@ redisClient.subscribe('messages.update');
 redisClient.on('message', function(channel, message) {
     var result = JSON.parse(message);
 
-    io.to('admin').emit(channel, 'channel -> ' + channel + ' |  conversation -> ' + result.conversation);   
-    io.to(result.conversation).emit(channel, result);   
+    console.log(channel);
+    console.log(result.room);
+
+    io.to('admin').emit(channel, 'channel -> ' + channel + ' |  room -> ' + result.room);
+    io.to(result.room).emit(channel, result);
+    
 });
 
 /***
@@ -46,6 +51,7 @@ io.on('connection', function(socket) {
     ***/
 
     socket.on('join', function(data) {
-         socket.join(data.conversation);
+         socket.join(data.room);
+         socket.emit('joined', { message: 'Joined room: ' + data.room });
     });
 });

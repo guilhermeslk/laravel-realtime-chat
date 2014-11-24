@@ -2,7 +2,7 @@
 
 class MessageController extends \BaseController {
 
-	public function getIndex() {
+	public function index() {
 
 		$conversation = Conversation::where('name', Input::get('conversation'))->first();
 		$messages 	  = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
@@ -10,7 +10,7 @@ class MessageController extends \BaseController {
 		return View::make('templates/messages')->with('messages', $messages)->render();
 	}
 
-	public function postStore() {
+	public function store() {
 		$rules 	   = array('body' => 'required');
 		$validator = Validator::make(Input::all(), $rules);
 
@@ -43,12 +43,11 @@ class MessageController extends \BaseController {
 
 		// Publish Data To Redis
    		$data = array(
-			'conversation' => Input::get('conversation'), 
-			'user_id' 	   => Input::get('user_id'),
-			'result'       => Str::words($message->body, 5)
+			'room' 	   => Input::get('conversation'), 
+			'message'  => array( 'body' => Str::words($message->body, 5), 'user_id' => Input::get('user_id'))
 		);
 
-		Event::fire(MessagesUpdateEventHandler::EVENT, array(json_encode($data)));
+		Event::fire(ChatMessagesEventHandler::EVENT, array(json_encode($data)));
 
    		return Response::json([
    			'success' => true,

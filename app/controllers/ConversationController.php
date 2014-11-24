@@ -2,7 +2,24 @@
 
 class ConversationController extends \BaseController {
 
-	public function postStore() {
+	public function index() {
+		$current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
+		$conversations 		  = Auth::user()->conversations()->get();
+		$users 				  = User::where('id', '<>', Auth::user()->id)->get();
+		$recipients 		  = array();
+
+		foreach($users as $key => $user) {
+			$recipients[ $user->id] = $user->username;
+		}
+
+		return View::make('templates/conversations')->with(array(
+			'conversations' 	   => $conversations, 
+			'current_conversation' => $current_conversation,
+			'recipients' 		   => $recipients 
+		));
+	}
+
+	public function store() {
 
 		$rules = array( 
 			'users' => 'required|array',
@@ -45,13 +62,18 @@ class ConversationController extends \BaseController {
 
 		foreach(Input::get('users') as $user_id) {
 			array_push($messages_notifications, new MessageNotification(array('user_id' => $user_id, 'read' => false))); 
+
+			// Publish Data To Redis
+	   		$data = array(
+				'room'    => $user_id,
+				'message' => array('conversation_id' => $conversation->id)
+			);
+
+			Event::fire(ChatConversationsEventHandler::EVENT, array(json_encode($data)));
 		}
 
 		$message->messages_notifications()->saveMany($messages_notifications);
 
-		return Response::json([
-			'success' => true,
-			'result' => $conversation
-		]);
+		return Redirect::route('chat.index', array('conversation', $conversation->name));
 	}
 }

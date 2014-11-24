@@ -43,7 +43,7 @@
 		<script type="text/javascript">
   			var socket = io('http://localhost:3000');
   			 	
-  			socket.emit('join', { conversation:  'admin' });
+  			socket.emit('join', { room:  'admin' });
 
   			// Events
   			socket.on('welcome', function (data) {
@@ -67,7 +67,11 @@
   			});
 
   			// Chat Events
-   			socket.on('messages.update', function(data) {
+   			socket.on('chat.messages', function(data) {
+   				appendMessage( 'Redis Message: ' + data , 'blue');
+   			});
+
+   			socket.on('chat.conversations', function(data) {
    				appendMessage( 'Redis Message: ' + data , 'blue');
    			});
 

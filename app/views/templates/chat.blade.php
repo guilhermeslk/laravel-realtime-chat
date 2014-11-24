@@ -24,7 +24,7 @@
 							<li><a href="#">Home</a></li>
 							
 							<li class="divider"></li>
-							<li><a href="{{ action('AuthController@getLogout') }}">Logout</a></li>
+							<li><a href="{{ action('AuthController@logout') }}">Logout</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -38,25 +38,8 @@
 	        </div>	        
 	    </div>
 	    <div class="row">
-	    	<div class="list-group col-lg-3">
-				@foreach($conversations as $conversation)
-	                <a id="{{ $conversation->name }}" class="list-group-item {{ Session::get('current_conversation') == $conversation->name  ? 'active' : '' }}" href="/chat/?conversation={{$conversation->name}}">
-						<div class="pull-left user-picture">
-                    		<img class="media-object img-circle" width="30" height="30" src="{{ $conversation->users->first()->image_path }}">
-                    	</div>
-
-                    	@if($conversation->unread_messages_counter) 
-	                   		<span class="badge">{{$conversation->unread_messages_counter}}</span>
-	                   	@endif
-
-						<h4 class="list-group-item-heading">
-							@foreach($conversation->users as $key => $user) 
-								{{ $user->username }}{{ $conversation->users->count() != ($key + 1) ? ',' : ''}}
-							@endforeach
-						</h4>
-    					<p class="list-group-item-text"><small>{{ Str::words($conversation->messages->last()->body, 5) }}</small></p>
-	                </a>
-		        @endforeach
+	    	<div id="conversationList">
+		    	@include('templates/conversations', array('conversations' => $conversations, 'current_conversation' => $current_conversation))
 	        </div>
 	        <div class="col-lg-8">
 	    		@if($current_conversation)
@@ -65,10 +48,8 @@
 							@include('templates/messages', array('messages' => $current_conversation->messages))
 						</div>
 			        </div>
-			        {{ Form::open(array('action' => 'MessageController@postStore')) }}
-			             
+			        {{ Form::open(array('action' => 'MessageController@store')) }}
 			           	<textarea id="messageBox" class="form-control send-message" rows="3" placeholder="Write a reply..."></textarea>
-			            
 			            <div class="send-message">
 			                <a id="btnSendMessage" class="text-right btn btn-sm btn-danger pull-right" role="button"><i class="fa fa-send"></i> Send Message</a>
 			            </div>
@@ -83,7 +64,7 @@
 	<script>
 		var 
 			current_conversation = "{{ Session::get('current_conversation') }}",
-			user_id = "{{ Auth::user()->id }}";
+			user_id   = "{{ Auth::user()->id }}";
 	</script>
 	<script src="{{ asset('/js/chat.js')}}"></script>
 @stop

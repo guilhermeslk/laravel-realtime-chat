@@ -2,7 +2,7 @@
 
 class ConversationUserController extends \BaseController {
 
-	public function getIndex($user_id) {
+	public function index($user_id) {
 		$conversations_users = ConversationUser::where('user_id', $user_id)->lists('conversation_id');
 
 		$conversations = array();

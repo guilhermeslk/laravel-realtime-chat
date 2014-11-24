@@ -1,6 +1,6 @@
 <div id="newMessageModal" class="modal fade">
 	<div class="modal-dialog">
-		{{ Form::open( array('action' => 'ConversationController@postStore')) }}
+		{{ Form::open( array('action' => 'ConversationController@store')) }}
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>

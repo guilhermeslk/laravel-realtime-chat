@@ -1,9 +1,9 @@
 <?php
 
-class MessagesUpdateEventHandler {
+class ChatConversationsEventHandler {
 
-	CONST EVENT   = 'messages.update';
-	CONST CHANNEL = 'messages.update';
+	CONST EVENT   = 'chat.conversations';
+	CONST CHANNEL = 'chat.conversations';
 
 	public function handle($data)
     {

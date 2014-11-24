@@ -2,7 +2,7 @@
 
 class ChatController extends \BaseController {
 	
-	public function getIndex() {
+	public function index() {
 
 		if(Input::has('conversation')) {
 			$current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
@@ -25,7 +25,7 @@ class ChatController extends \BaseController {
 		return View::make('templates/chat')->with(array(
 			'conversations' 	   => $conversations, 
 			'current_conversation' => $current_conversation,
-			'recipients' => $recipients 
+			'recipients' 		   => $recipients 
 		));
 	}
 }

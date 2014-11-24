@@ -18,32 +18,36 @@ $(function() {
 	jqxhr.done(function(data) {
 		if(data.success && data.result.length > 0) {
 			$.each(data.result, function(index, conversation) {
-				socket.emit('join', { conversation:  conversation.name });
+				socket.emit('join', { room:  conversation.name });
 			});
 		}
 	});
 
+	/***
+		Socket.io Events
+	***/
+
 	socket.on('welcome', function (data) {
+  		console.log(data.message);
+
+  		socket.emit('join', { room:  user_id });
+  	});
+
+  	socket.on('joined', function(data) {
   		console.log(data.message);
   	});
 
-	socket.on('messages.update', function(data) {
+	socket.on('chat.messages', function(data) {
 		var 
 			$messageList  = $("#messageList"),
-			$conversation = $("#" + data.conversation);
+			$conversation = $("#" + data.room);
 	
-		var message 	 = data.result,
-			from_user_id = data.user_id,
-			conversation = data.conversation;
-		
-   		var jqxhr = $.ajax({
-			url: '/messages',
-			type: 'GET',
-			data: { conversation: data.conversation },
-			dataType: 'html'
-		});
+		var message 	 = data.message.body,
+			from_user_id = data.message.user_id,
+			conversation = data.room;
 
-		jqxhr.done(function(data) {
+		getMessages(conversation).done(function(data) {
+
 			$conversation.find('small').text(message);
 			
 			if(conversation === current_conversation) {
@@ -57,25 +61,50 @@ $(function() {
 		});
    	});
 
+   	socket.on('chat.conversations', function(data) {
+
+   		var $conversationList = $("#conversationList");
+   		
+   		getConversations(current_conversation).done(function(data) {
+   			$conversationList.html(data);
+   		});
+   	});
+
 	/***
 		Functions
 	***/
 
-	function sendMessage(evt) {
-		var 
-			$messageBox  = $("#messageBox");
+	function getConversations(current_conversation) {
+		var jqxhr = $.ajax({
+				url: '/conversations',
+				type: 'GET',
+				data: { conversation: current_conversation },
+				dataType: 'html'
+			});
 
+		return jqxhr;
+	}
+
+	function getMessages(conversation) {
+   		var jqxhr = $.ajax({
+			url: '/messages',
+			type: 'GET',
+			data: { conversation: conversation },
+			dataType: 'html'
+		});
+
+		return jqxhr;
+	}
+
+	function sendMessage(body, conversation, user_id) {
 		var jqxhr = $.ajax({
 			url: '/messages',
 			type: 'POST',
-			data:  { body: $messageBox.val(), conversation: current_conversation, user_id: user_id },
+			data:  { body: body , conversation: conversation, user_id: user_id },
 			dataType: 'json'
 		});
-
-		jqxhr.done(function(data) {
-			$messageBox.val('');
-			$messageBox.focus();
-		});
+		
+		return jqxhr;
 	}		
 
 	function updateConversationCounter($conversation) {
@@ -98,7 +127,21 @@ $(function() {
 		}
 	}
 
-	$('#btnSendMessage').on('click', sendMessage);
+	/***
+		Events
+	***/
+
+	$('#btnSendMessage').on('click', function (evt) {
+		var 
+			$messageBox  = $("#messageBox");
+
+		evt.preventDefault();
+
+		sendMessage($messageBox.val(), current_conversation, user_id).done(function(data) {
+			$messageBox.val('');
+			$messageBox.focus();
+		});
+	});
 
 	$('#btnNewMessage').on('click', function() {
 		$('#newMessageModal').modal('show');
