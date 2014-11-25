@@ -45,19 +45,19 @@ $ cd nodejs
 $ npm install
 ```
 
-### Step 6 Run PHP's built-in development server
+### Step 6: Run PHP's built-in development server
 
 ```bash
 $ cd ..
 $ php artisan serve
 ```
-### Step 8 Start Redis Server
+### Step 7: Start Redis Server
 
 ```bash
 $ redis-server
 ```
 
-### Step 9 Start the "realtime" server
+### Step 8: Start the "realtime" server
 
 ```bash
 $ ./realtime.sh
