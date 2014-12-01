@@ -2,7 +2,7 @@
 
 A realtime chat sample written in Laravel 4.2 + Redis + Node.js + Socket.io.
 
-Um exemplo de chat realtime escrito em Laravel 4.2 + Redis Node.js + Socket.io (instruções em inglês somente).
+Um exemplo de chat realtime escrito em Laravel 4.2 + Redis Node.js + Socket.io (instruções somente em inglês).
 
 ##Requirements
 	Laravel 4.2
