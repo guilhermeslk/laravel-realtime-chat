@@ -2,66 +2,67 @@
 
 class MessageController extends \BaseController {
 
-	/**
-	 * Display a listing of the messages.
-	 *
-	 * @return Response
-	 */
-	public function index() {
+    /**
+     * Display a listing of messages.
+     *
+     * @return Response
+     */
+    public function index() {
 
-		$conversation = Conversation::where('name', Input::get('conversation'))->first();
-		$messages 	  = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
+        $conversation = Conversation::where('name', Input::get('conversation'))->first();
+        $messages       = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
 
-		return View::make('templates/messages')->with('messages', $messages)->render();
-	}
+        return View::make('templates/messages')->with('messages', $messages)->render();
+    }
 
-	/**
-	 * Store a newly created message in storage.
-	 *
-	 * @return Response
-	 */
-	public function store() {
-		$rules 	   = array('body' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+    /**
+     * Store a newly created message in storage.
+     *
+     * @return Response
+     */
+    public function store() {
 
-		if($validator->fails()) {
-			return Response::json([
-				'success' => false,
-				'result' => $validator->messages()
-			]);
-		}
+        $rules     = array('body' => 'required');
+        $validator = Validator::make(Input::all(), $rules);
 
-		$conversation = Conversation::where('name', Input::get('conversation'))->first();
+        if($validator->fails()) {
+            return Response::json([
+                'success' => false,
+                'result' => $validator->messages()
+            ]);
+        }
 
-		$params = array(
-			'conversation_id' => $conversation->id,
-			'body' 			  => Input::get('body'),
-			'user_id' 		  => Input::get('user_id'),
-			'created_at'	  => new DateTime
-		);
+        $conversation = Conversation::where('name', Input::get('conversation'))->first();
 
-   		$message = Message::create($params);
+        $params = array(
+            'conversation_id' => $conversation->id,
+            'body'               => Input::get('body'),
+            'user_id'           => Input::get('user_id'),
+            'created_at'      => new DateTime
+        );
 
-   		// Create Message Notifications
-   		$messages_notifications = array();
+           $message = Message::create($params);
 
-   		foreach($conversation->users()->get() as $user) {
-			array_push($messages_notifications, new MessageNotification(array('user_id' => $user->id, 'conversation_id' => $conversation->id, 'read' => false))); 
-		}		
+           // Create Message Notifications
+           $messages_notifications = array();
 
-		$message->messages_notifications()->saveMany($messages_notifications);
+           foreach($conversation->users()->get() as $user) {
+            array_push($messages_notifications, new MessageNotification(array('user_id' => $user->id, 'conversation_id' => $conversation->id, 'read' => false)));
+        }
 
-		// Publish Data To Redis
-   		$data = array(
-			'room' 	   => Input::get('conversation'), 
-			'message'  => array( 'body' => Str::words($message->body, 5), 'user_id' => Input::get('user_id'))
-		);
+        $message->messages_notifications()->saveMany($messages_notifications);
 
-		Event::fire(ChatMessagesEventHandler::EVENT, array(json_encode($data)));
+        // Publish Data To Redis
+           $data = array(
+            'room'        => Input::get('conversation'),
+            'message'  => array( 'body' => Str::words($message->body, 5), 'user_id' => Input::get('user_id'))
+        );
 
-   		return Response::json([
-   			'success' => true,
-   			'result' => $message
-   		]);
-	}
+    	Event::fire(ChatMessagesEventHandler::EVENT, array(json_encode($data)));
+
+        return Response::json([
+           'success' => true,
+           'result' => $message
+		]);
+    }
 }

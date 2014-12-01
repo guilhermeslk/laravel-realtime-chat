@@ -1,31 +1,36 @@
 <?php
 
 class ChatController extends \BaseController {
-	
-	public function index() {
 
-		if(Input::has('conversation')) {
-			$current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
-		} else {
-			$current_conversation = Auth::user()->conversations()->first();
-		}
+	/**
+	* Display the chat index.
+	*
+	* @return Response
+	*/
+    public function index() {
 
-		if($current_conversation) {
-			Session::set('current_conversation', $current_conversation->name);
-		}
+        if(Input::has('conversation')) {
+            $current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
+        } else {
+            $current_conversation = Auth::user()->conversations()->first();
+        }
 
-		$conversations = Auth::user()->conversations()->get();
-		$users = User::where('id', '<>', Auth::user()->id)->get();
-		$recipients = array();
+        if($current_conversation) {
+            Session::set('current_conversation', $current_conversation->name);
+        }
 
-		foreach($users as $key => $user) {
-			$recipients[ $user->id] = $user->username;
-		}
+        $conversations = Auth::user()->conversations()->get();
+        $users = User::where('id', '<>', Auth::user()->id)->get();
+        $recipients = array();
 
-		return View::make('templates/chat')->with(array(
-			'conversations' 	   => $conversations, 
-			'current_conversation' => $current_conversation,
-			'recipients' 		   => $recipients 
-		));
-	}
+        foreach($users as $key => $user) {
+            $recipients[ $user->id] = $user->username;
+        }
+
+        return View::make('templates/chat')->with(array(
+            'conversations'        => $conversations,
+            'current_conversation' => $current_conversation,
+            'recipients'            => $recipients
+        ));
+    }
 }

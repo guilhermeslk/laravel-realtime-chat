@@ -3,7 +3,7 @@
 class ConversationController extends \BaseController {
 
     /**
-     * Display a listing of the conversations.
+     * Display a listing of conversations.
      *
      * @return Response
      */
