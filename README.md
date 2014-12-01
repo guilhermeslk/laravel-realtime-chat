@@ -54,7 +54,7 @@ $ php artisan serve
 $ redis-server
 ```
 
-### Step 8: Start the "realtime" server
+### Step 8: Start the "Realtime" server (nodejs/server.js)
 
 ```bash
 $ ./realtime.sh
