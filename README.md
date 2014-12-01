@@ -5,9 +5,6 @@ A realtime chat sample written in Laravel 4.2 + Redis + Node.js + Socket.io.
 Um exemplo de chat realtime escrito em Laravel 4.2 + Redis Node.js + Socket.io (instruções em inglês somente).
 
 ##Requirements
-	PHP >= 5.4.0
-	MCrypt PHP Extension
-	Composer
 	Laravel 4.2
 	MySQL
 	Redis
@@ -27,7 +24,7 @@ $ cd laravel-realtime-chat
 $ composer install
 ```
 ### Step 3: Configure Database
-Edit your ***app/config/local/database.php*** to match your local database settings. 
+Edit your ***app/config/local/database.php*** to match your local database settings.
 
 ### Step 4: Migrate & Populate Database
 Run these commands to create and populate your database:
@@ -38,7 +35,7 @@ $ php artisan db:seed
 ```
 
 ### Step 5: Install NPM dependencies
-You must cd into the nodejs folder and all the dependencies listed on packages.json will be installed
+CD into the nodejs folder and run npm install in order to have the all dependencies installed.
 
 ```bash
 $ cd nodejs
@@ -64,8 +61,3 @@ $ ./realtime.sh
 ```
 
 That's it! Now you should be ready to go!
-
-
-
-
-
