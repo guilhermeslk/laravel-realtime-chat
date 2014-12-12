@@ -1,4 +1,4 @@
-var 
+var
     app         = require('http').createServer(handler),
     io 	        = require('socket.io')(app),
     redis       = require('redis'),
@@ -32,12 +32,8 @@ redisClient.subscribe('chat.messages');
 redisClient.on('message', function(channel, message) {
     var result = JSON.parse(message);
 
-    console.log(channel);
-    console.log(result.room);
-
     io.to('admin').emit(channel, 'channel -> ' + channel + ' |  room -> ' + result.room);
     io.to(result.room).emit(channel, result);
-    
 });
 
 /***

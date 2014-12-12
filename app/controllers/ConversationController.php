@@ -71,7 +71,7 @@ class ConversationController extends \BaseController {
         $messages_notifications = array();
 
         foreach(Input::get('users') as $user_id) {
-            array_push($messages_notifications, new MessageNotification(array('user_id' => $user_id, 'read' => false)));
+            array_push($messages_notifications, new MessageNotification(array('user_id' => $user_id, 'read' => false, 'conversation_id' => $conversation->id)));
 
             // Publish Data To Redis
                $data = array(

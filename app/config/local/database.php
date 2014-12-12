@@ -25,7 +25,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'chat',
 			'username'  => 'root',
-			'password'  => '',
+			'password'  => 'nazon4is',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
