@@ -41,8 +41,7 @@ Edit your ***app/config/local/database.php*** to match your local database setti
 			'prefix'    => '',
 		),
     ...
-``
-
+```
 ### Step 4: Migrate & Populate Database
 Run these commands to create and populate your database:
 
