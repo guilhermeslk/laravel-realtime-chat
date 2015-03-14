@@ -12,24 +12,24 @@ class AuthController extends \BaseController {
 
     public function postLogin() {
         $input = Input::only(array(
-        	'email',
-        	'password'
+            'email',
+            'password'
         ));
 
         $rules = array(
-        	'email'    => 'required|email',
-        	'password' => 'required|min:6'
+            'email'    => 'required|email',
+            'password' => 'required|min:6'
         );
 
         $validator = Validator::make($input, $rules);
 
         if($validator->fails()) {
-        	return Redirect::route('auth.postLogin')->withErrors($validator);
+            return Redirect::route('auth.postLogin')->withErrors($validator);
         }
 
         if(Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')), false)) {
-        	return Redirect::route('chat.index');
-		}
+            return Redirect::route('chat.index');
+        }
     }
 
     public function logout() {

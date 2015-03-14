@@ -3,10 +3,10 @@
 class ChatController extends \BaseController {
 
     /**
-    * Display the chat index.
-    *
-    * @return Response
-    */
+     * Display the chat index.
+     *
+     * @return Response
+     */
     public function index() {
 
         if(Input::has('conversation')) {
