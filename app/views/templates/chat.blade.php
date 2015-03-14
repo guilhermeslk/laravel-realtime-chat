@@ -61,11 +61,11 @@
 @stop
 
 @section('scripts')
-<script>
-var 
-current_conversation = "{{ Session::get('current_conversation') }}",
-    user_id   = "{{ Auth::user()->id }}";
-</script>
+    <script>
+        var 
+            current_conversation = "{{ Session::get('current_conversation') }}",
+            user_id   = "{{ Auth::user()->id }}";
+    </script>
     <script src="{{ asset('/js/chat.js')}}"></script>
 @stop
 

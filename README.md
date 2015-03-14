@@ -26,6 +26,23 @@ $ composer install
 ### Step 3: Configure Database
 Edit your ***app/config/local/database.php*** to match your local database settings.
 
+```php
+    ...
+	'connections' => array(
+
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => '<HOST>',
+			'database'  => '<DATABASE>',
+			'username'  => '<USERNAME>',
+			'password'  => '<PASSWORD>',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+    ...
+``
+
 ### Step 4: Migrate & Populate Database
 Run these commands to create and populate your database:
 
