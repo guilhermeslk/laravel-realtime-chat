@@ -24,7 +24,7 @@ $ cd laravel-realtime-chat
 $ composer install
 ```
 ### Step 3: Configure Database
-Edit your ***app/config/local/database.php*** to match your local database settings.
+Edit your ***database.php*** to match your local database settings.
 
 ```php
     ...
