@@ -15,13 +15,13 @@ class ChatController extends \BaseController {
             $current_conversation = Auth::user()->conversations()->first();
         }
 
-        foreach($current_conversation->messages_notifications as $notification) {
-            $notification->read = true;
-            $notification->save();
-        }
-
         if($current_conversation) {
             Session::set('current_conversation', $current_conversation->name);
+    
+            foreach($current_conversation->messages_notifications as $notification) {
+                $notification->read = true;
+                $notification->save();
+            }
         }
 
         $conversations = Auth::user()->conversations()->get();
