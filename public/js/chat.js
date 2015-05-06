@@ -150,7 +150,7 @@ $(function() {
      * Shift+Enter to send message
      */
     $('#messageBox').keypress(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 && event.shiftKey) {
             event.preventDefault();
             
             $('#btnSendMessage').trigger('click');
