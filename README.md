@@ -1,6 +1,6 @@
-[![Code Climate](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat/badges/gpa.svg)](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat)
-
 # Laravel Realtime Chat
+
+[![Code Climate](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat/badges/gpa.svg)](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat)
 
 A realtime chat sample written in Laravel 4.2 + Redis + Node.js + Socket.io.
 
