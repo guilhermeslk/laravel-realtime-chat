@@ -145,4 +145,15 @@ $(function() {
     $('#btnNewMessage').on('click', function() {
         $('#newMessageModal').modal('show');
     });
+    
+    /**
+     * Shift+Enter to send message
+     */
+    $('#messageBox').keypress(function (event) {
+        if (event.keyCode == 13 && event.shiftKey) {
+            event.preventDefault();
+            
+            $('#btnSendMessage').trigger('click');
+        }
+    });
 });

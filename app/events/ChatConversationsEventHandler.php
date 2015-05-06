@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
+
 class ChatConversationsEventHandler {
 
 	CONST EVENT   = 'chat.conversations';
