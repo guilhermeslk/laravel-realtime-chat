@@ -6,4 +6,4 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-/nbproject/private/
+/nodejs/node_modules
