@@ -1,6 +1,25 @@
 <?php
 
+use LaravelRealtimeChat\Repositories\Conversation\ConversationRepository;
+use LaravelRealtimeChat\Repositories\User\UserRepository;
+    
 class ChatController extends \BaseController {
+
+    /**
+     * @var LaravelRealtimeChat\Repositories\ConversationRepository
+     */
+    private $conversationRepository; 
+
+    /**
+     * @var LaravelRealtimeChat\Repositories\UserRepository
+     */
+    private $userRepository; 
+
+    public function __construct(ConversationRepository $conversationRepository, UserRepository $userRepository)
+    {
+        $this->conversationRepository = $conversationRepository;
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * Display the chat index.
@@ -9,33 +28,31 @@ class ChatController extends \BaseController {
      */
     public function index() {
 
+        $viewData = array();
+
         if(Input::has('conversation')) {
-            $current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
+            $viewData['current_conversation'] = $this->conversationRepository->getByName(Input::get('conversation'));
         } else {
-            $current_conversation = Auth::user()->conversations()->first();
+            $viewData['current_conversation'] = Auth::user()->conversations()->first();
         }
 
-        if($current_conversation) {
-            Session::set('current_conversation', $current_conversation->name);
+        if($viewData['current_conversation']) {
+            Session::set('current_conversation', $viewData['current_conversation']->name);
     
-            foreach($current_conversation->messages_notifications as $notification) {
+            foreach($viewData['current_conversation']->messages_notifications as $notification) {
                 $notification->read = true;
                 $notification->save();
             }
         }
-
-        $conversations = Auth::user()->conversations()->get();
-        $users         = User::where('id', '<>', Auth::user()->id)->get();
-        $recipients    = array();
+       
+        $users = $this->userRepository->getAllExcept(Auth::user()->id);
 
         foreach($users as $key => $user) {
-            $recipients[ $user->id] = $user->username;
+            $viewData['recipients'][$user->id] = $user->username;
         }
-
-        return View::make('templates/chat')->with(array(
-            'conversations'        => $conversations,
-            'current_conversation' => $current_conversation,
-            'recipients'            => $recipients
-        ));
+        
+        $viewData['conversations'] = Auth::user()->conversations()->get();
+        
+        return View::make('templates/chat', $viewData);
     }
 }

@@ -16,7 +16,11 @@
 			"app/database/seeds",
 			"app/tests/TestCase.php",
 			"app/events"
-		]
+		],
+        "psr-4": {
+            "LaravelRealtimeChat\\": "app/LaravelRealtimeChat"
+        }
+
 	},
 	"scripts": {
 		"post-install-cmd": [

@@ -11,6 +11,9 @@
 |
 */
 
+App::bind('LaravelRealtimeChat\Repositories\Conversation\ConversationRepository', 'LaravelRealtimeChat\Repositories\Conversation\DbConversationRepository');
+App::bind('LaravelRealtimeChat\Repositories\User\UserRepository', 'LaravelRealtimeChat\Repositories\User\DbUserRepository');
+
 Route::get('/', function() {
 	return Redirect::route('auth.postLogin');
 });

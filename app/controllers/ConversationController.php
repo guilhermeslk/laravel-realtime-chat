@@ -1,27 +1,44 @@
 <?php
 
+use LaravelRealtimeChat\Repositories\Conversation\ConversationRepository;
+
 class ConversationController extends \BaseController {
+
+    /**
+     * @var LaravelRealtimeChat\Repositories\Conversation\ConversationRepository
+     */
+    private $conversationRepository;
+
+    /**
+     * @var LaravelRealtimeChat\Repositories\User\UserRepository
+     */ 
+    private $userRepository;
+
+    public function __construct(ConversationRepository $conversationRepository, UserRepository $userRepository) 
+    {
+        $this->conversationRepository = $conversationRepository;
+        $this->userRepository = $userRepository;
+    }
 
     /**
      * Display a listing of conversations.
      *
      * @return Response
      */
-    public function index() {
-        $current_conversation = Conversation::where('name',  Input::get('conversation'))->firstOrFail();
-        $conversations        = Auth::user()->conversations()->get();
-        $users                = User::where('id', '<>', Auth::user()->id)->get();
-        $recipients           = array();
+    public function index() 
+    {
+        $viewData = array();
+
+        $users = $this->userRepository->getAllExcept(Auth::user()->id);
 
         foreach($users as $key => $user) {
-            $recipients[ $user->id] = $user->username;
+            $viewData['recipients'][$user->id] = $user->username;
         }
+        
+        $viewData['current_conversation'] = $this->conversationRepository->getByName(Input::get('conversation'));
+        $viewData['conversations'] = Auth::user()->conversations()->get();
 
-        return View::make('templates/conversations')->with(array(
-            'conversations'        => $conversations,
-            'current_conversation' => $current_conversation,
-            'recipients'            => $recipients
-        ));
+        return View::make('templates/conversations', $viewData);
     }
 
     /**
@@ -29,7 +46,8 @@ class ConversationController extends \BaseController {
      *
      * @return Response
      */
-    public function store() {
+    public function store() 
+    {
 
         $rules = array(
             'users' => 'required|array',
