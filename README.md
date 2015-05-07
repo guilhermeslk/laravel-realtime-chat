@@ -1,4 +1,5 @@
 # Laravel Realtime Chat
+[![Build Status](https://travis-ci.org/guilhermeslk/laravel-realtime-chat.svg?branch=master)](https://travis-ci.org/guilhermeslk/laravel-realtime-chat)
 
 [![Code Climate](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat/badges/gpa.svg)](https://codeclimate.com/github/guilhermeslk/laravel-realtime-chat)
 
