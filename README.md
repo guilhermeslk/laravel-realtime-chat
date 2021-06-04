@@ -8,14 +8,14 @@ Um exemplo de chat realtime escrito em Laravel 4.2 + Redis Node.js + Socket.io (
 
 Live example available at: http://chat.guilhermeslk.com.br :)
 
-##Requirements
+## Requirements
 	Laravel 4.2
 	MySQL
 	Redis
 	Node.js
 	NPM
 
-##How to install
+## How to install
 ### Step 1: Clone this repo
 
 ```bash
